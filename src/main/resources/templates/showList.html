@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>showList</title>
+
+</head>
+<body>
+<table>
+    <tr>
+        <th>id</th>
+        <th>title</th>
+        <th>title(||쓰지 않은 경우)</th>
+        <th>writer</th>
+        <th>date</th>
+        <th>hits</th>
+    </tr>
+
+    <tr th:each="board: ${boardList}"> <!--반복문의 반복되는 범위는 th 태그가 있는 부분-->
+        <td th:text="${board.id}"></td>
+        <td><a th:href="@{|/board/showOne/${board.id}|}" th:text="${board.title}"></a></td>
+        <td><a th:href="@{/board/showOne/${board.id}}" th:text="${board.title}"></a></td> <!--이거는 ||를 쓰지 않을때-->
+        <td th:text="${board.nickname}"></td>
+        <td th:text="*{#temporals.format(board.entryDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${board.boardHits}"></td>
+    </tr>
+</table>
+</body>
+</html>

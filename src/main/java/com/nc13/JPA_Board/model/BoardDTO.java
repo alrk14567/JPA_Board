@@ -1,6 +1,8 @@
 package com.nc13.JPA_Board.model;
 
 
+import com.nc13.JPA_Board.entity.BoardEntity;
+import com.nc13.JPA_Board.service.BoardService;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,5 +29,28 @@ public class BoardDTO {
 //    private String originalFileName; // 원본 파일 이름
 //    private String storedFileName; // 서버 저장용 파일 이름
 //    private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
+
+
+    public BoardDTO(Long id, String nickname, String title, int boardHits, LocalDateTime entryDate) {
+        this.id = id;
+        this.nickname = nickname;
+        this.title = title;
+        this.boardHits = boardHits;
+        this.entryDate = entryDate;
+    }
+
+    // 엔티티를 DTO로 변환
+    public static BoardDTO toBoardDTO(BoardEntity boardEntity) {
+        BoardDTO boardDTO=new BoardDTO();
+        boardDTO.setId(boardEntity.getId());
+        boardDTO.setNickname(boardEntity.getNickname());
+        boardDTO.setBoardPass(boardEntity.getBoardPass());
+        boardDTO.setTitle(boardEntity.getTitle());
+        boardDTO.setContent(boardEntity.getContent());
+        boardDTO.setBoardHits(boardEntity.getBoardHits());
+        boardDTO.setEntryDate(boardEntity.getEntryDate());
+        boardDTO.setModifyDate(boardEntity.getModifyDate());
+        return boardDTO;
+    }
 
 }

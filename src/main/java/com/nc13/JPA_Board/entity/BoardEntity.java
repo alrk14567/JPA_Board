@@ -12,7 +12,7 @@ import lombok.Setter;
 public class BoardEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(length= 20,nullable=false) //크기 20, not null
     private String nickname;
@@ -20,7 +20,7 @@ public class BoardEntity extends BaseEntity {
     @Column //크기 255, null가능
     private String boardPass;
 
-    @Column
+    @Column()
     private String title;
 
     @Column(length = 500)
@@ -34,6 +34,17 @@ public class BoardEntity extends BaseEntity {
         boardEntity.setNickname(boardDTO.getNickname());
         boardEntity.setBoardPass(boardDTO.getBoardPass());
         boardEntity.setBoardHits(0);
+        boardEntity.setTitle(boardDTO.getTitle());
+        boardEntity.setContent(boardDTO.getContent());
+        return boardEntity;
+    }
+
+    public static BoardEntity toUpdateEntity (BoardDTO boardDTO) {
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setId(boardDTO.getId());
+        boardEntity.setNickname(boardDTO.getNickname());
+        boardEntity.setBoardPass(boardDTO.getBoardPass());
+        boardEntity.setBoardHits(boardDTO.getBoardHits());
         boardEntity.setTitle(boardDTO.getTitle());
         boardEntity.setContent(boardDTO.getContent());
         return boardEntity;
