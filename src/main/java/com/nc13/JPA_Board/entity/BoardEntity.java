@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -29,6 +32,17 @@ public class BoardEntity extends BaseEntity {
     @Column
     private int boardHits;
 
+    @Column
+    private int fileAttached; // 1 or 0
+
+    //부모 테이블의 형태
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BoardFileEntity> boardFileEntityList=new ArrayList<>();
+
+    @OneToMany(mappedBy = "boardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CommentEntity> commentEntityList=new ArrayList<>();
+
+
     public static BoardEntity toInsertEntity(BoardDTO boardDTO) {
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.setNickname(boardDTO.getNickname());
@@ -36,6 +50,7 @@ public class BoardEntity extends BaseEntity {
         boardEntity.setBoardHits(0);
         boardEntity.setTitle(boardDTO.getTitle());
         boardEntity.setContent(boardDTO.getContent());
+        boardEntity.setFileAttached(0);//파일 없음
         return boardEntity;
     }
 
@@ -50,4 +65,14 @@ public class BoardEntity extends BaseEntity {
         return boardEntity;
     }
 
+    public static BoardEntity toSaveFileEntity(BoardDTO boardDTO) {
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setNickname(boardDTO.getNickname());
+        boardEntity.setBoardPass(boardDTO.getBoardPass());
+        boardEntity.setBoardHits(0);
+        boardEntity.setTitle(boardDTO.getTitle());
+        boardEntity.setContent(boardDTO.getContent());
+        boardEntity.setFileAttached(1);//파일 있음
+        return boardEntity;
+    }
 }

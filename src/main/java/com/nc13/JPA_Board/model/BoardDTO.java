@@ -2,12 +2,15 @@ package com.nc13.JPA_Board.model;
 
 
 import com.nc13.JPA_Board.entity.BoardEntity;
+import com.nc13.JPA_Board.entity.BoardFileEntity;
 import com.nc13.JPA_Board.service.BoardService;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,10 +28,10 @@ public class BoardDTO {
     private LocalDateTime entryDate;
     private LocalDateTime modifyDate;
 
-//    private MultipartFile boardFile; // save.html -> Controller 파일 담는 용도
-//    private String originalFileName; // 원본 파일 이름
-//    private String storedFileName; // 서버 저장용 파일 이름
-//    private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
+    private List<MultipartFile> File; // save.html -> Controller 파일 담는 용도
+    private List<String> originalFileName; // 원본 파일 이름
+    private List<String> storedFileName; // 서버 저장용 파일 이름
+    private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
 
 
     public BoardDTO(Long id, String nickname, String title, int boardHits, LocalDateTime entryDate) {
@@ -50,6 +53,23 @@ public class BoardDTO {
         boardDTO.setBoardHits(boardEntity.getBoardHits());
         boardDTO.setEntryDate(boardEntity.getEntryDate());
         boardDTO.setModifyDate(boardEntity.getModifyDate());
+        if (boardEntity.getFileAttached() ==0) {
+            boardDTO.setFileAttached(boardEntity.getFileAttached());
+        } else {
+            List<String> originalFileNameList = new ArrayList<>();
+            List <String> storedFileNameList = new ArrayList<>();
+            boardDTO.setFileAttached(boardEntity.getFileAttached());
+            //파일 이름도 가져가야함
+            // originalFileName, storedFileName : board_file_table(boardFileEntity)]
+            for (BoardFileEntity boardFileEntity: boardEntity.getBoardFileEntityList()) {
+                originalFileNameList.add(boardFileEntity.getOriginalFileName());
+                storedFileNameList.add(boardFileEntity.getStoredFileName());
+            }
+            /*boardDTO.setOriginalFileName(boardEntity.getBoardFileEntityList().get(0).getOriginalFileName());
+            boardDTO.setStoredFileName(boardEntity.getBoardFileEntityList().get(0).getStoredFileName());*/
+            boardDTO.setOriginalFileName(originalFileNameList);
+            boardDTO.setStoredFileName(storedFileNameList);
+        }
         return boardDTO;
     }
 
